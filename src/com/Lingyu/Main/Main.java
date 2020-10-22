@@ -3,6 +3,7 @@ package com.Lingyu.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,21 +22,20 @@ public class Main extends JavaPlugin implements Listener {
     	getServer().getConsoleSender().sendMessage("Stamina is disable!");
     }
 
+    @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Player p = event.getPlayer();
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
-           
-            @Override
+    	Bukkit.getServer().getScheduler().runTaskTimer(this, new Runnable() {
+    		
             public void run() {
-                while(p.isOnline()) {
+            	Player p = event.getPlayer();
                     if(p.isSprinting()) {
-                    	p.setFoodLevel(p.getFoodLevel() -1);
+                    	p.setFoodLevel(p.getFoodLevel() - 1);
                     }
                     else {
-						p.setFoodLevel(p.getFoodLevel() +1);
-					}
+						p.setFoodLevel(p.getFoodLevel() + 1);
+                    }
                 }
-            }
-        }, 40l);
+            
+        }, 40l,40l);
     }
 }
