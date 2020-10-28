@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.sun.xml.internal.ws.api.Cancelable;
+
 public class Main extends JavaPlugin implements Listener {
 
 	// Fired when plugin is enabled
@@ -24,10 +26,11 @@ public class Main extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-    	Bukkit.getServer().getScheduler().runTaskTimer(this, new Runnable() {
+    	Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
     		
             public void run() {
             	Player p = event.getPlayer();
+            	while (p.isOnline()) {
                     if(p.isSprinting()) {
                     	p.setFoodLevel(p.getFoodLevel() - 1);
                     }
@@ -35,7 +38,7 @@ public class Main extends JavaPlugin implements Listener {
 						p.setFoodLevel(p.getFoodLevel() + 1);
                     }
                 }
-            
+            }
         }, 40l,40l);
     }
 }
