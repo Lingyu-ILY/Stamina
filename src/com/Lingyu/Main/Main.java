@@ -1,14 +1,12 @@
 package com.Lingyu.Main;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.sun.xml.internal.ws.api.Cancelable;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Main extends JavaPlugin implements Listener {
 
@@ -26,19 +24,22 @@ public class Main extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-    	Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+    	new BukkitRunnable() {
     		
             public void run() {
             	Player p = event.getPlayer();
-            	while (p.isOnline()) {
+            	int pfl = p.getFoodLevel();
+            		if(!p.isOnline()) {
+            			this.cancel();
+            		}
                     if(p.isSprinting()) {
-                    	p.setFoodLevel(p.getFoodLevel() - 1);
+                    	p.setFoodLevel(pfl - 1);
                     }
                     else {
-						p.setFoodLevel(p.getFoodLevel() + 1);
+                    	if(pfl < 19)
+                    		p.setFoodLevel(pfl + 1);
                     }
-                }
             }
-        }, 40l,40l);
+        }.runTaskTimerAsynchronously(this, 40l,20l);
     }
 }
